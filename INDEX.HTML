@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CAPSTONE Secure Login System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', 'Roboto Mono', monospace;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            /* Add background image */
+            background:
+                /* Background Image */
+                url('https://uploads.onecompiler.io/439svksyk/446pyaz9c/girl-hacker-hoodie-using-laptop-600nw-2434664869.jpg') no-repeat center center / cover,
+                /* Main cyber gradient */
+                linear-gradient(135deg, #0a0a1f 0%, #1a0033 25%, #0f0f23 50%, #000428 75%, #000000 100%),
+                /* Matrix rain effect */
+                radial-gradient(circle at 20% 80%, rgba(0,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,0,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0,255,0,0.08) 0%, transparent 50%),
+                /* Dark cyber grid */
+                radial-gradient(ellipse at center, rgba(0,255,255,0.03) 0%, transparent 70%);
+            background-size: cover, 400% 400%, 100px 100px, 200px 200px, 150px 150px, cover;
+            animation: cyberShift 20s ease infinite, matrixFlow 30s linear infinite;
+        }
+
+        @keyframes cyberShift {
+            0%, 100% { background-position: center, 0% 50%, 0px 0px, 0px 0px, 0px 0px, 0% 0%; }
+            33% { background-position: center, 100% 50%, 100px 100px, 200px 200px, 150px 150px, 100% 100%; }
+            66% { background-position: center, 0% 100%, 200px 0px, 0px 200px, 300px 150px, 0% 100%; }
+        }
+
+        @keyframes matrixFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* Floating particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, #00ffff, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(0,255,0,0.6), transparent),
+                radial-gradient(1px 1px at 90px 40px, #ff00ff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,0,0.8), transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: particleFloat 25s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes particleFloat {
+            from { transform: translateY(0px) rotate(0deg); }
+            to { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        /* Enhanced Watermark */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0.02;
+            z-index: 2;
+            font-size: 180px;
+            font-weight: 900;
+            color: #00ffff;
+            text-align: center;
+            line-height: 0.9;
+            text-shadow:
+                0 0 20px #00ffff,
+                0 0 40px #00ffff,
+                0 0 60px #00ffff;
+            animation: watermarkPulse 4s ease-in-out infinite alternate;
+        }
+
+        .watermark::before {
+            content: '🔒 CYBERSEC';
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            font-size: 0.6em;
+            color: rgba(0,255,255,0.3);
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes watermarkPulse {
+            0% {
+                opacity: 0.02;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0.04;
+                transform: translate(-50%, -50%) scale(1.02);
+            }
+        }
+
+        @keyframes glitch {
+            0%, 100% {
+                transform: translate(0);
+            }
+            10% {
+                transform: translate(-2px, 2px);
+            }
+            20% {
+                transform: translate(2px, -2px);
+            }
+            30% {
+                transform: translate(-1px, 1px);
+            }
+        }
+
+        .slide {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px);
+            z-index: 10;
+        }
+        .slide.active {
+            display: flex;
+        }
+
+        .container {
+            background: rgba(10,10,20,0.9);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0,255,255,0.2);
+            border-radius: 25px;
+            padding: 60px;
+            box-shadow:
+                0 25px 75px rgba(0,0,0,0.8),
+                0 0 50px rgba(0,255,255,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0,255,255,0.03), transparent);
+            transform: rotate(45deg);
+            animation: scanline 6s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        h1 {
+            color: #00ffff;
+            font-size: 2.8em;
+            margin-bottom: 35px;
+            text-shadow: 0 0 30px #00ffff;
+            position: relative;
+            z-index: 2;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 18px;
+            margin: 12px 0;
+            border: 2px solid rgba(0,255,255,0.3);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Roboto Mono', monospace;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+        input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 25px rgba(0,255,255,0.6);
+            background: rgba(0,255,255,0.1);
+        }
+        button {
+            background: linear-gradient(135deg, #00ffff, #0099cc, #00bfff);
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        button:hover::before {
+            left: 100%;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,255,255,0.5);
+        }
+
+        .password-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .password-options button {
+            width: auto;
+            padding: 15px 25px;
+            flex: 1;
+            min-width: 130px;
+        }
+
+        .captcha-img {
+            font-size: 5em;
+            font-weight: 900;
+            color: #00ffff;
+            margin: 25px 0;
+            text-shadow: 0 0 20px #00ffff;
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 15px;
+            letter-spacing: 8px;
+            display: inline-block;
+        }
+
+        .success {
+            color: #4ade80;
+            font-size: 3.2em;
+            animation: successPulse 2s infinite;
+            text-shadow: 0 0 30px #4ade80;
+        }
+        @keyframes successPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        .error {
+            color: #ff4444;
+            margin: 15px 0;
+            font-weight: 500;
+            text-shadow: 0 0 10px #ff4444;
+        }
+
+        #displayUsername {
+            color: #00ffff;
+            font-weight: 700;
+            text-shadow: 0 0 15px #00ffff;
+            font-size: 1.3em;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 30px;
+            }
+            h1 {
+                font-size: 2.2em;
+            }
+            .captcha-img {
+                font-size: 3.5em;
+                letter-spacing: 5px;
+            }
+            .password-options button {
+                min-width: 110px;
+                padding: 12px 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="watermark">CAPSTONE<br>PROJECTS</div>
+
+    <!-- Slide 1: Login -->
+    <div class="slide active" id="loginSlide">
+        <div class="container">
+            <h1>🔐 Secure Login</h1>
+            <input type="text" id="username" placeholder="Enter Username" />
+            <input type="password" id="password" placeholder="Enter Password" />
+            <div class="password-options">
+                <button onclick="generatePassword()">🔑 Generate</button>
+                <button onclick="nextSlide()">🚀 Authenticate</button>
+            </div>
+            <div id="errorMsg" class="error"></div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Captcha -->
+    <div class="slide" id="captchaSlide">
+        <div class="container">
+            <h1>🛡 Human Verification</h1>
+            <div class="captcha-img" id="captchaText"></div>
+            <input type="text" id="captchaInput" placeholder="Type the code above" />
+            <button onclick="checkCaptcha()">✅ Verify</button>
+            <div id="captchaError" class="error"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Success -->
+    <div class="slide" id="successSlide">
+        <div class="container">
+            <h1 class="success">✅ Access Granted!</h1>
+            <p style="color: #ccc; font-size: 1.4em; margin: 20px 0;">
+                Welcome to Secure Network<br />
+                <strong>Agent: <span id="displayUsername"></span></strong>
+            </p>
+            <button onclick="resetApp()">🔄 New Session</button>
+        </div>
+    </div>
+
+    <script>
+        let currentCaptcha = '';
+        let savedUsername = '';
+
+        function showSlide(slideId) {
+            document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
+            document.getElementById(slideId).classList.add('active');
+        }
+
+        function generatePassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            let password = '';
+            for (let i = 0; i < 14; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('password').value = password;
+        }
+
+        function nextSlide() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            if (!username || !password) {
+                document.getElementById('errorMsg').textContent = '⚠ Credentials required for access!';
+                return;
+            }
+            document.getElementById('errorMsg').textContent = '';
+            savedUsername = username;
+            generateCaptcha();
+            showSlide('captchaSlide');
+        }
+
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            currentCaptcha = '';
+            for (let i = 0; i < 6; i++) {
+                currentCaptcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captchaText').textContent = currentCaptcha;
+            document.getElementById('captchaInput').value = '';
+            document.getElementById('captchaInput').placeholder = 'Type the security code';
+            document.getElementById('captchaError').textContent = '';
+        }
+
+        function checkCaptcha() {
+            const userCaptcha = document.getElementById('captchaInput').value.toUpperCase().trim();
+            if (userCaptcha === currentCaptcha) {
+                document.getElementById('captchaInput').value = '';
+                document.getElementById('displayUsername').textContent = savedUsername;
+                showSlide('successSlide');
+            } else {
+                document.getElementById('captchaError').textContent = '❌ Verification failed. Retry.';
+                generateCaptcha();
+            }
+        }
+
+        function resetApp() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('captchaInput').value = '';
+            savedUsername = '';
+            document.getElementById('errorMsg').textContent = '';
+            document.getElementById('captchaError').textContent = '';
+            showSlide('loginSlide');
+        }
+
+        // Enhanced Enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide.id === 'loginSlide') nextSlide();
+                if (activeSlide.id === 'captchaSlide') checkCaptcha();
+            }
+        });
+
+        // Auto-generate password on load
+        window.addEventListener('load', generatePassword);
+    </script>
+</body>
+</html>
